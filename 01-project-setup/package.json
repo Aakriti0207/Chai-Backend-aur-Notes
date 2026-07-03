@@ -1,0 +1,19 @@
+{
+  "name": "backend-aakriti",
+  "version": "1.0.0",
+  "description": "learning backend ",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "node",
+    "backend"
+  ],
+  "author": "Aakriti Arya",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}
