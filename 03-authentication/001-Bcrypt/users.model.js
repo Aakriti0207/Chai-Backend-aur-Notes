@@ -1,6 +1,7 @@
 import mongoose , {Schema} from "mongoose";
-import { JsonWebTokenError } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { JsonWebTokenError } from "jsonwebtoken";
 
 const userSchema = new Schema(
     {
@@ -60,6 +61,33 @@ userSchema.pre("Save", async function (next) {      //we don't use arrow functio
 
 userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password)
+}
+
+userSchema.methods.generateAccessToken = function() {
+    jwt.sign(
+        {
+            _id: this._id,
+            email: this.email,
+            username: this.username,
+            fullName: this.fullName
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRY
+        }
+    )
+}
+
+userSchema.methods.generateRefreshToken = function(){
+    jwt.sign(
+        {
+            _id: this._id,
+        },
+        process.env.REFERESH_TOKEN_SECRET,
+        {
+            expiresIn: process.env.REFERESH_TOKEN_EXPIRY
+        }
+    )
 }
 
 export const User = mongoose.model("User" , userSchema);
